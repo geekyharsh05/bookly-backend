@@ -1,13 +1,18 @@
 import express from "express";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import cors from "cors";
+import "dotenv/config";
+import { Database } from './db/db';
+import authRouter from "./routes/auth.route"
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT ?? 3001;
 
+// Initialize middleware
 app.use(express.json());
 // app.use(cookieParser());
 
+// Configure CORS
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -25,10 +30,11 @@ app.use(
   })
 );
 
-// app.use("/api/auth", authRouter);
-// app.use("/api/course", courseRouter);
+// API routes
+app.use("/api/auth", authRouter);
 // app.use("/api/user", userRouter);
 
+// Global error handler
 app.use(
   (err: Error, req: Request, res: Response, next: express.NextFunction) => {
     console.error(err.stack);
@@ -36,8 +42,24 @@ app.use(
   }
 );
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// Initialize database and start server
+const startServer = async () => {
+  try {
+    // Connect to database
+    const db = Database.getInstance();
+    await db.connect();
+    
+    // Start Express server after DB connection
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+// Start the application
+startServer();
 
 export default app;
