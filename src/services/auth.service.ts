@@ -3,17 +3,7 @@ import jwt from 'jsonwebtoken';
 import { RegisterInput, LoginInput, registerSchema, loginSchema } from '../validators/user.schema';
 import { validateSchema } from '../utils/validate';
 import { ApiError } from '../utils/ApiError';
-
-interface UserResponse {
-  email: string;
-  username: string;
-  profileImage: string;
-}
-
-interface AuthResponse {
-  token: string;
-  user: UserResponse;
-}
+import { AuthResponse, UserResponse } from '../types/response.types';
 
 export class AuthService {
   public async registerUser(input: RegisterInput): Promise<AuthResponse> {
