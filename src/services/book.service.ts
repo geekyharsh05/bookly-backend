@@ -62,5 +62,16 @@ export class BookService {
 
     return { id };
   }
+
+  public async getBooksByCurrentUser({userId}: {userId: string}) {
+    const books = await Book.find({ user: userId }).sort({ createdAt: -1 })
+    if (!books) {
+      throw new ApiError(400, "Error retrieving books")
+    }
+
+    return {
+      books
+    };
+  }
 }
 
