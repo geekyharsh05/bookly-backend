@@ -4,7 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 import morgan from "morgan";
 import helmet from "helmet";
-import { Database } from './db/db';
+import { Database } from './lib/db';
 import Routes from "./routes/index";
 
 const app = express();
