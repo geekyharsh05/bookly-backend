@@ -43,6 +43,17 @@ export class BookController {
       ...result,
     };
   });
+
+  public getBooksRecommendation = asyncHandler(async (req: Request) => {
+    const userId = req.user?._id?.toString();
+
+    const result = await this.bookService.getBooksByCurrentUser({ userId });
+
+    return {
+      message: 'Books fetched successfully',
+      ...result,
+    };
+  })
 }
 
 
