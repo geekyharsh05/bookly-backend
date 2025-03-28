@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import morgan from "morgan";
+import helmet from "helmet";
 import { Database } from './db/db';
 import authRouter from "./routes/auth.route"
 
@@ -11,7 +12,8 @@ const PORT = process.env.PORT ?? 3001;
 
 // Initialize middleware
 app.use(express.json());
-app.use(morgan("dev"))
+app.use(morgan("dev"));
+app.use(helmet());
 
 // Configure CORS
 app.use(
@@ -58,5 +60,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-export default app;

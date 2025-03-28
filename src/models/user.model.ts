@@ -1,5 +1,5 @@
 import { prop, getModelForClass, pre, DocumentType } from '@typegoose/typegoose';
-import mongoose, { Types } from 'mongoose';
+import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 @pre<UserClass>('save', async function(next) {
