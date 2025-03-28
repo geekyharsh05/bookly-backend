@@ -18,7 +18,8 @@ export class AuthService {
     });
     
     if (existingUser) {
-      throw new Error(
+      throw new ApiError(
+        400,
         existingUser.email === validatedData.email 
           ? 'Email already exists' 
           : 'Username already exists'
@@ -39,7 +40,7 @@ export class AuthService {
 
     const user = await User.findOne({ email: validatedData.email });
     if (!user) {
-      throw new ApiError(400, 'Email does not exist');
+      throw new ApiError(400, 'User does not exist');
     }
 
     const isValidPassword = await user.isPasswordCorrect(validatedData.password);
