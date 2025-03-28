@@ -2,7 +2,7 @@ import { validateSchema } from '../utils/validate.util';
 import { ApiError } from '../utils/apierror.util';
 import { BookResponse } from '../types/response.types';
 import { BookInput, bookSchema } from '../validators/book.schema';
-import cloudinary from '../lib/cloudinary';
+import cloudinary, { deleteImageFromCloudinary, uploadImageToCloudinary } from '../lib/cloudinary';
 import { Book } from '../models/book.model';
 import { formatCreateBookResponse } from '../utils/format.util';
 
@@ -10,13 +10,7 @@ export class BookService {
   public async createBook(input: BookInput): Promise<BookResponse> {
     const validatedData: BookInput = validateSchema(bookSchema, input);
 
-    let imageUrl = '';
-    try {
-      const uploadResult = await cloudinary.uploader.upload(validatedData.image as string);
-      imageUrl = uploadResult.secure_url;
-    } catch (err) {
-      throw new ApiError(500, 'Image upload failed');
-    }
+    const imageUrl = await uploadImageToCloudinary(validatedData.image as string)
 
     const book = await Book.create({
       ...validatedData,
@@ -34,6 +28,8 @@ export class BookService {
       .skip(skip)
       .limit(limit)
       .populate("user", "username profileImage");
+    
+    const totalBooks = await Book.countDocuments();
 
     if (!books) {
       throw new ApiError(400, 'Error retrieving books');
@@ -41,10 +37,30 @@ export class BookService {
 
     return {
       books,
-      pagination: {
-        page,
-        limit,
-      }
+      currentPage: page,
+      totalBooks,
+      totalPages: Math.ceil(totalBooks / limit)
     };
   }
+
+  public async deleteBook({ id, userId }: { id: string; userId: string }) {
+    const book = await Book.findById(id);
+
+    if (!book) {
+      throw new ApiError(404, 'Book not found');
+    }
+
+    if (book.user.toString() !== userId) {
+      throw new ApiError(403, 'You are not authorized to delete this book');
+    }
+
+    if (book.image && book.image.includes("cloudinary")) {
+      await deleteImageFromCloudinary(book.image)
+    }
+
+    await book.deleteOne();
+
+    return { id };
+  }
 }
+
