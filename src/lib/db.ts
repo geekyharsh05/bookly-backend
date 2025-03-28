@@ -37,14 +37,4 @@ export class Database {
       throw error;
     }
   }
-
-  public async disconnect(): Promise<void> {
-    try {
-      await mongoose.disconnect();
-      console.log('Successfully disconnected from MongoDB');
-    } catch (error) {
-      console.error('Error disconnecting from MongoDB:', error);
-      throw error;
-    }
-  }
 }
