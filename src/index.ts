@@ -5,17 +5,15 @@ import "dotenv/config";
 import morgan from "morgan";
 import helmet from "helmet";
 import { Database } from './db/db';
-import authRouter from "./routes/auth.route"
+import Routes from "./routes/index";
 
 const app = express();
 const PORT = process.env.PORT ?? 3001;
 
-// Initialize middleware
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet());
 
-// Configure CORS
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -33,8 +31,7 @@ app.use(
   })
 );
 
-// API routes
-app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/", Routes);
 
 // Global error handler
 app.use(
@@ -44,7 +41,6 @@ app.use(
   }
 );
 
-// Initialize database and start server
 const startServer = async () => {
   try {
     const db = Database.getInstance();
