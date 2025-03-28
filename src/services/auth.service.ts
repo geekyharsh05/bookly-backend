@@ -69,9 +69,10 @@ export class AuthService {
 
   private formatUserResponse(user: UserDocument): UserResponse {
     return {
+      id: user._id.toString(),
       email: user.email,
       username: user.username,
-      profileImage: user.profileImage || ""
+      profileImage: user.profileImage ?? ""
     };
   }
 }
