@@ -22,7 +22,7 @@ export class Database {
 
       await mongoose.connect(uri);
       
-      console.log('Successfully connected to MongoDB Atlas');
+      console.log('Successfully connected to MongoDB');
 
       mongoose.connection.on('error', (err) => {
         console.error('MongoDB connection error:', err);

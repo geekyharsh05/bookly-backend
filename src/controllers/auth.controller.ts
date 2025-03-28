@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
+import { RegisterInput, LoginInput } from '../validators/user.schema';
+import { asyncHandler } from '../utils/asyncHandler';
 
 export class AuthController {
   private authService: AuthService;
@@ -8,37 +10,26 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
-  public async register(req: Request, res: Response): Promise<Response> {
-    try {
-      const { email, password, name } = req.body;
-      const result = await this.authService.registerUser(email, password, name);
-      
-      return res.status(201).json({
-        message: 'User created successfully',
-        ...result
-      });
-    } catch (error) {
-      if (error instanceof Error && error.message === 'User already exists') {
-        return res.status(400).json({ message: error.message });
-      }
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-  }
+  public login = asyncHandler(async (req: Request) => {
+    const result = await this.authService.loginUser(req.body);
+    return {
+      message: 'Login successful',
+      ...result
+    };
+  });
 
-  public async login(req: Request, res: Response): Promise<Response> {
-    try {
-      const { email, password } = req.body;
-      const result = await this.authService.loginUser(email, password);
+  public register = asyncHandler(async (req: Request) => {
+    const result = await this.authService.registerUser(req.body);
+    return {
+      message: 'User created successfully',
+      ...result
+    };
+  });
 
-      return res.status(200).json({
-        message: 'Login successful',
-        ...result
-      });
-    } catch (error) {
-      if (error instanceof Error && error.message === 'Invalid credentials') {
-        return res.status(400).json({ message: error.message });
-      }
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-  }
+  public getProfile = asyncHandler(async (req: Request) => {
+    return {
+      message: 'Profile retrieved successfully',
+      user: req.user
+    };
+  });
 }
