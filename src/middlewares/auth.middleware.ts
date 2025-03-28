@@ -1,15 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { User, UserDocument } from '../models/user.model';
+import { User } from '../models/user.model';
 import { IJwtPayload } from '../types/jwt.types';
-
-declare global {
-    namespace Express {
-      interface Request {
-        user?: UserDocument;
-      }
-    }
-}
 
 export const isAuthenticated = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

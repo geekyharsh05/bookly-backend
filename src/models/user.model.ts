@@ -15,7 +15,7 @@ export class UserClass {
   @prop({ required: true, unique: true })
   public email!: string;
 
-  @prop({ required: true, minlength: 6 })
+  @prop({ required: true, minlength: 8 })
   public password!: string;
 
   @prop({ default: "" })
