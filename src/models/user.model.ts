@@ -1,6 +1,7 @@
-import { prop, getModelForClass, pre, DocumentType } from '@typegoose/typegoose';
+import { prop, getModelForClass, pre, DocumentType, modelOptions } from '@typegoose/typegoose';
 import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
 @pre<UserClass>('save', async function(next) {
     if (!this.isModified('password')) return next();
@@ -9,10 +10,10 @@ import bcrypt from 'bcryptjs';
     next();
 })
 
-export class UserClass {
-  @prop()
+@modelOptions({ schemaOptions: { timestamps: true } })
+export class UserClass extends TimeStamps {
   public _id!: Types.ObjectId;
-
+  
   @prop({ required: true, unique: true })
   public username!: string;
 
