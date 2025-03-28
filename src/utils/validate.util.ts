@@ -1,5 +1,5 @@
 import { ZodSchema, ZodError } from 'zod';
-import { ApiError } from './ApiError';
+import { ApiError } from './apierror.util';
 
 export const validateSchema = <T>(schema: ZodSchema, data: unknown): T => {
   const result = schema.safeParse(data);

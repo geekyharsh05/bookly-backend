@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
-import { RegisterInput, LoginInput } from '../validators/user.schema';
-import { asyncHandler } from '../utils/asyncHandler';
+import { asyncHandler } from '../utils/asynchandler.util';
 
 export class AuthController {
   private authService: AuthService;

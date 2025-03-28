@@ -1,9 +1,10 @@
-import { User, UserDocument } from '../models/user.model';
-import jwt from 'jsonwebtoken';
+import { User } from '../models/user.model';
 import { RegisterInput, LoginInput, registerSchema, loginSchema } from '../validators/user.schema';
-import { validateSchema } from '../utils/validate';
-import { ApiError } from '../utils/ApiError';
-import { AuthResponse, UserResponse } from '../types/response.types';
+import { validateSchema } from '../utils/validate.util';
+import { ApiError } from '../utils/apierror.util';
+import { AuthResponse } from '../types/response.types';
+import { generateToken } from '../utils/token.util';
+import { formatUserResponse } from '../utils/format.util';
 
 export class AuthService {
   public async registerUser(input: RegisterInput): Promise<AuthResponse> {
@@ -25,12 +26,11 @@ export class AuthService {
     }
 
     const user = await User.create(validatedData);
-
-    const token = this.generateToken(user._id.toString());
+    const token = generateToken(user._id.toString());
 
     return {
       token,
-      user: this.formatUserResponse(user)
+      user: formatUserResponse(user)
     };
   }
 
@@ -47,32 +47,11 @@ export class AuthService {
       throw new ApiError(400, 'Incorrect Credentials');
     }
 
-    const token = this.generateToken(user._id.toString());
+    const token = generateToken(user._id.toString());
 
     return {
       token,
-      user: this.formatUserResponse(user)
-    };
-  }
-
-  private generateToken(userId: string): string {
-    if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET is not defined');
-    }
-
-    return jwt.sign(
-      { userId },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-  }
-
-  private formatUserResponse(user: UserDocument): UserResponse {
-    return {
-      id: user._id.toString(),
-      email: user.email,
-      username: user.username,
-      profileImage: user.profileImage ?? ""
+      user: formatUserResponse(user)
     };
   }
 }

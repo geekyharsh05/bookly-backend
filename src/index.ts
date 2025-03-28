@@ -12,7 +12,6 @@ const PORT = process.env.PORT ?? 3001;
 // Initialize middleware
 app.use(express.json());
 app.use(morgan("dev"))
-// app.use(cookieParser());
 
 // Configure CORS
 app.use(
@@ -34,7 +33,6 @@ app.use(
 
 // API routes
 app.use("/api/v1/auth", authRouter);
-// app.use("/api/user", userRouter);
 
 // Global error handler
 app.use(
