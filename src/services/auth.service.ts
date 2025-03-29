@@ -26,6 +26,8 @@ export class AuthService {
       );
     }
 
+    validatedData.profileImage = `https://api.dicebear.com/9.x/avataaars/svg?seed=${validatedData.username}`;
+
     const user = await User.create(validatedData);
     const token = generateToken(user._id.toString());
 
