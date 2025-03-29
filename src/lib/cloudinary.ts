@@ -13,6 +13,7 @@ export const uploadImageToCloudinary = async (image: string): Promise<string> =>
       const uploadResult = await cloudinary.uploader.upload(image);
       return uploadResult.secure_url;
     } catch (error) {
+      console.error(error)
       throw new ApiError(500, 'Image upload failed');
     }
 };

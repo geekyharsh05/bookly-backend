@@ -7,7 +7,7 @@ import { Book } from '../models/book.model';
 import { formatCreateBookResponse } from '../utils/format.util';
 
 export class BookService {
-  public async createBook(input: BookInput): Promise<BookResponse> {
+  public async createBook(input: BookInput, userId: string): Promise<BookResponse> {
     const validatedData: BookInput = validateSchema(bookSchema, input);
 
     const imageUrl = await uploadImageToCloudinary(validatedData.image as string)
@@ -15,6 +15,7 @@ export class BookService {
     const book = await Book.create({
       ...validatedData,
       image: imageUrl,
+      user: userId
     });
 
     return formatCreateBookResponse(book);

@@ -7,7 +7,7 @@ export const bookSchema = z.object({
     .regex(/^[a-zA-Z0-9\s.,!?'"-]+$/, 'Title can only contain letters, numbers, spaces, and punctuation'),
 
   caption: z.string()
-    .min(5, 'Caption must be at least 5 characters')
+    .min(3, 'Caption must be at least 3 characters')
     .max(300, 'Caption cannot exceed 300 characters'),
 
   rating: z.number({

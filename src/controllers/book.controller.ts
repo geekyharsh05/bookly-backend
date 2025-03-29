@@ -10,7 +10,7 @@ export class BookController {
   }
 
   public createBook = asyncHandler(async (req: Request) => {
-    const result = await this.bookService.createBook(req.body);
+    const result = await this.bookService.createBook(req.body, req.user._id.toString());
 
     return {
       message: 'Book created successfully',
