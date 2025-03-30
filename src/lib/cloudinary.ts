@@ -10,8 +10,10 @@ cloudinary.config({
 
 export const uploadImageToCloudinary = async (image: string): Promise<string> => {
   try {
-    const isBase64 = image.startsWith('data:image');
-    const imageToUpload = isBase64 ? image : `data:image/jpeg;base64,${image}`;
+    const isBase64Image = /^data:image\/[a-z]+;base64,/.test(image);
+    const imageToUpload = isBase64Image
+      ? image
+      : `data:image/jpeg;base64,${image}`;
 
     const uploadResult = await cloudinary.uploader.upload(imageToUpload, {
       folder: 'books',
@@ -23,6 +25,7 @@ export const uploadImageToCloudinary = async (image: string): Promise<string> =>
     throw new ApiError(500, 'Image upload failed');
   }
 };
+
 
 export const deleteImageFromCloudinary = async (imageUrl: string): Promise<void> => {
     try {
