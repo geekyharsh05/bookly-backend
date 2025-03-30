@@ -22,8 +22,12 @@ export class BookService {
   }
 
   public async getBooks(page: number, limit: number) {
-    const skip = (page - 1) * limit;
+    if (page <= 0 || limit <= 0) {
+      throw new ApiError(400, 'Page and limit must be positive integers');
+    }
 
+    const skip = (page - 1) * limit;
+    
     const books = await Book.find()
       .sort({ createdAt: -1 })
       .skip(skip)
