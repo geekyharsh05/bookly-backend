@@ -9,13 +9,17 @@ cloudinary.config({
 });
 
 export const uploadImageToCloudinary = async (image: string): Promise<string> => {
-    try {
-      const uploadResult = await cloudinary.uploader.upload(image);
-      return uploadResult.secure_url;
-    } catch (error) {
-      console.error(error)
-      throw new ApiError(500, 'Image upload failed');
-    }
+  try {
+    const isBase64 = image.startsWith('data:image');
+    const imageToUpload = isBase64 ? image : `data:image/jpeg;base64,${image}`;
+
+    const uploadResult = await cloudinary.uploader.upload(imageToUpload);
+
+    return uploadResult.secure_url;
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    throw new ApiError(500, 'Image upload failed');
+  }
 };
 
 export const deleteImageFromCloudinary = async (imageUrl: string): Promise<void> => {
