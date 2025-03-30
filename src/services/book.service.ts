@@ -9,9 +9,8 @@ import { formatCreateBookResponse } from '../utils/format.util';
 export class BookService {
   public async createBook(input: BookInput, userId: string): Promise<BookResponse> {
     const validatedData: BookInput = validateSchema(bookSchema, input);
-    console.log(validatedData.image)
+
     const imageUrl = await uploadImageToCloudinary(validatedData.image as string)
-    console.log(imageUrl)
 
     const book = await Book.create({
       ...validatedData,
@@ -76,4 +75,3 @@ export class BookService {
     };
   }
 }
-

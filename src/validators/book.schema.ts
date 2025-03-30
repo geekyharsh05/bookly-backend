@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-const base64ImageRegex = /^data:image\/(png|jpeg|jpg|gif);base64,[A-Za-z0-9+/=]+$/;
-
 export const bookSchema = z.object({
   title: z.string()
     .min(3, 'Title must be at least 3 characters')
@@ -19,9 +17,7 @@ export const bookSchema = z.object({
     .min(0, 'Rating cannot be less than 0')
     .max(5, 'Rating cannot exceed 5'),
 
-  image: z.string()
-    .regex(base64ImageRegex, "Invalid Base64 image format")
-    .optional(),
+  image: z.string().optional()
 });
 
 export type BookInput = z.infer<typeof bookSchema>;
