@@ -13,7 +13,9 @@ export const uploadImageToCloudinary = async (image: string): Promise<string> =>
     const isBase64 = image.startsWith('data:image');
     const imageToUpload = isBase64 ? image : `data:image/jpeg;base64,${image}`;
 
-    const uploadResult = await cloudinary.uploader.upload(imageToUpload);
+    const uploadResult = await cloudinary.uploader.upload(imageToUpload, {
+      folder: 'books',
+    });
 
     return uploadResult.secure_url;
   } catch (error) {
