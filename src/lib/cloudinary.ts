@@ -15,6 +15,8 @@ export const uploadImageToCloudinary = async (image: string): Promise<string> =>
       ? image
       : `data:image/jpeg;base64,${image}`;
 
+      console.log(imageToUpload.slice(0,200))
+
     const uploadResult = await cloudinary.uploader.upload(imageToUpload, {
       folder: 'books',
     });
