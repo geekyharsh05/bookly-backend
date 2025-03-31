@@ -8,7 +8,8 @@ export const formatUserResponse = (user: UserDocument): UserResponse => {
     id: user._id.toString(),
     email: user.email,
     username: user.username,
-    profileImage: user.profileImage ?? ""
+    profileImage: user.profileImage ?? "",
+    createdAt: user.createdAt,
   };
 }; 
 

@@ -3,6 +3,7 @@ export interface UserResponse {
   email: string;
   username: string;
   profileImage: string;
+  createdAt: Date | undefined;
 }
   
 export interface AuthResponse {
