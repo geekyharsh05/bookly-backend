@@ -6,13 +6,9 @@ import morgan from "morgan";
 import helmet from "helmet";
 import { Database } from './lib/db';
 import Routes from "./routes/index";
-import job from "./lib/cron";
 
 const app = express();
 const PORT = process.env.PORT ?? 3001;
-
-// cron job runs every 14 minutes.
-job.start();
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
